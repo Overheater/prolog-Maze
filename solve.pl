@@ -18,6 +18,10 @@ try(Row, Column, NextRow, NextColumn) :- NextRow is Row, NextColumn is Column - 
 %   prints a single cell in the maze.
 %
 %   Print a barrier.
+% prints the top and bottom of the the maze, a helper function for the print maze function
+printBox(width):-
+write('+'),
+for
 printCell(Maze, _, Row, Column) :- maze(Maze, Row, Column, barrier), write('x').
 
 printMaze(Maze, List) ;- true.
