@@ -19,11 +19,31 @@ try(Row, Column, NextRow, NextColumn) :- NextRow is Row, NextColumn is Column - 
 %
 %   Print a barrier.
 % prints the top and bottom of the the maze, a helper function for the print maze function
+getChar(open, ' ').
+getChar(barrier, 'x').
+
 printBox(width):-
 write('+'),
-for
-printCell(Maze, _, Row, Column) :- maze(Maze, Row, Column, barrier), write('x').
+forall(between(1,width,_),write('-')),
+writeln('+').
 
-printMaze(Maze, List) ;- true.
+printMaze(array, size) :-
+    mazeSize(size, Height, Width),
+    printBox(Width),
+    % for each line of the maze    
+    forall(between(1, Height, I),
+           (   write('|'),
+               % for each cell of the line
+               forall(between(1, Width, J),
+                          % What is the type of the corresponding cell
+                      (   maze(_, I, J, Type),
+                          % What is the character of the type
+                          getChar(Type, C),
+                          write(C))),
+               writeln('|'))),
+    print_line(Width).
+%printCell(Maze, _, Row, Column) :- maze(Maze, Row, Column, barrier), write('x').
 
-solve(Maze) :- true.
+%printMaze(Maze, List) ;- true.
+
+%solve(Maze) :- true.
