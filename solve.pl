@@ -19,30 +19,40 @@ try(Row, Column, NextRow, NextColumn) :- NextRow is Row, NextColumn is Column - 
 %
 %   Print a barrier.
 % prints the top and bottom of the the maze, a helper function for the print maze function
-getChar(open, ' ').
-getChar(barrier, 'x').
-
-printBox(width):-
+printList(List):-
+printerate(List).
+printBox(_width):-
 write('+'),
-forall(between(1,width,_),write('-')),
+forall(between(1,_width,_),
+	write('-')),
 writeln('+').
-
-printMaze(array, size) :-
-    mazeSize(size, Height, Width),
-    printBox(Width),
-    % for each line of the maze    
-    forall(between(1, Height, I),
-           (   write('|'),
-               % for each cell of the line
-               forall(between(1, Width, J),
-                          % What is the type of the corresponding cell
-                      (   maze(_, I, J, Type),
-                          % What is the character of the type
-                          getChar(Type, C),
-                          write(C))),
-               writeln('|'))),
-    print_line(Width).
-%printCell(Maze, _, Row, Column) :- maze(Maze, Row, Column, barrier), write('x').
+ 
+print_row_short(Maze, Row) :-
+    mazeSize(Maze, _Rows, Columns),
+	write('|'),
+    forall(between(1, Columns, Column),
+           printCell(Maze, _, Row, Column)),
+    writeln('|').
+	
+	
+printMaze(Maze, List) :-
+    mazeSize(Maze, Rows, _Columns),
+	printBox(_Columns),
+    forall(between(1, Rows, Row),
+           print_row_short(Maze, Row)),
+	printBox(_Columns).
+	
+	
+printCell(Maze, _, Row, Column) :- maze(Maze, Row, Column, barrier), write('x').
+printCell(Maze, _, Row, Column) :- maze(Maze, Row, Column, open), write(' ').
+printCell(Maze, _, Row, Column) :- maze(Maze, Row, Column, trail), write('*').
+checkCell(Maze,List,Row,Column) :- iterate(List,Row,Column).
+printerate([]).
+printerate([H|T]):-writeln(H),printerate(T).
+iterate([],Row,Column).
+iterate([H|T],Row,Column):- check(H,Row,Column),iterate(T).
+check([],Row,Column).
+check(H,Row,Column):-member(H,(Row,Column)),printcell(Maze,trail,Row,Column).
 
 %printMaze(Maze, List) ;- true.
 

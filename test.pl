@@ -4,10 +4,10 @@
 ?- consult(solve).
 
 % Should print the small maze
-?- printMaze([], small).
+?- printMaze( small,[]).
 
 % Should print the small maze
-%?- printList([]).
+?- printList([]).
 
 % Solve the small maze
 %?- solve(small).
